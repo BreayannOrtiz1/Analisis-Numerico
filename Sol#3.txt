@@ -1,0 +1,13 @@
+newton<-function(r,tol){
+  i<-0
+  error<-1
+  while(error>tol){
+    if(r!=0){
+      bef=r
+      r<-r-((Fx(r))/Dx(r))
+      error<-(abs(bef-r))/abs(bef)
+      cat("R=",r,"\t Error:",error,"\n")
+    }
+  }
+}
+newton(1,1.e-8)

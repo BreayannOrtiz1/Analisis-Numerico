@@ -1,0 +1,116 @@
+
+
+# Remueve todos los objetos creados
+rm(list=ls())
+#-----------------------------------
+#5*x-exp(x)-1
+#(exp(x)*(-1))/pi
+#((exp(x)*(-1))/pi)-x
+#-----------------------------------
+#5*x-exp(x)-1
+#
+#
+Fx <- function(x)  ((1-(((x)^2)/4))^(1/2))-x/2
+Gx <- function(x) (1+exp(x))/5
+Tx <- function(x) ((1+exp(x))/5)-x
+Dx<- function(x)  -(x/(2*((4-x^2)^(1/2))))-1/2
+
+# Halla la raiz de Fx
+biseccion <- function(a,b) {
+  x<-seq(a,b,0.1)
+  plot(x,Fx(x),type="l",col="blue")
+  abline(h=0,col="blue")
+  x<-b
+  d<-(a+b)/2
+  i<-0
+  error<-abs(a-b)/2
+  while (error > 1.e-8) {
+    i<-i+1
+    if (Fx(x) == 0) break
+    if (Fx(x)*Fx(a) < 0) b <- x else {a <- x}
+    d<-x
+    x<-(a+b)/2
+    #points(rbind(c(x,0)),pch=17,cex=0.7,col="red")
+    text(x,0,i,cex=0.8,col="red")
+    error<-(abs(a-b)/2)*100
+    cat("X=",x,"\tE=",error,"\ti: ",i,"\n")
+  }
+}
+
+# Halla la raiz de Fx usando el metodo de Punto fijo
+puntoFijo <- function(a,b) {
+  i<-1
+  x<-seq(a,b,0.05)
+  plot(x,Fx(x),type="l",col="blue")
+  abline(h=0,col="blue")
+  x<-b
+  error<-1
+  while(error > 1.e-8 && i<6){
+    x<-b
+    b<-Gx(x)
+    #text(x,0,i,cex=0.8,col="red")
+    error<-abs((b-x)/b)*100
+    cat("X=",x,"\tError=",error,"\ti: ",i,"\n")
+    i<-i+1
+  }
+}
+
+calcularRaiz<-function(a,b,E) {
+  x<-a
+  aux<-Fx(x)
+  error<-1
+  d<-(b-a)/10
+  cat("aux: ",aux,"\n")
+  if(aux>0){
+    while(error>E)
+    {
+      x<-x+d
+      aux<-Fx(x)
+      while(aux<0 && error>E)
+      {
+        x<-x-d
+        d<-d/10
+        aux2<-aux
+        aux<-Fx(x)
+        error<-abs((aux-aux2)/2)*100
+        cat("X=",x,"\t Error:",error,"\t aux: ",aux,"\td: ",d,"\n")
+      }
+    }
+  }
+  else
+  {
+    while(error>E)
+    {
+      x<-x+d
+      aux<-Fx(x)
+      while(aux>0 && error>E)
+      {
+        x<-x-d
+        d<-d/10
+        aux2<-aux
+        aux<-Fx(x)
+        error<-abs((aux-aux2)/2)*100
+        cat("X=",x,"\t Error:",error,"\t aux: ",aux,"\t d: ",d,"\n")
+      }
+    }
+    
+  }
+}
+
+newton<-function(r,tol){
+  i<-0
+  error<-1
+  while(error>tol){
+    if(r!=0){
+      bef=r
+      r<-r-((Fx(r))/Dx(r))
+      error<-(abs(bef-r))/abs(bef)
+      cat("R=",r,"\t Error:",error,"\n")
+    }
+  }
+}
+newton(1,1.e-8)
+#calcularRaiz(2,3,1.e-8)
+#biseccion(-1,1)  
+#biseccion(2,3)  
+#puntoFijo(0,1)
