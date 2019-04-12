@@ -1,0 +1,15 @@
+rm(list=ls())
+
+Bin<-function(n){
+  
+  while(n>0){
+    
+    d=n%%2
+    
+    n=floor(n/2)
+    
+    cat(d,"\n")
+    
+    }
+  
+}
